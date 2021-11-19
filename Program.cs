@@ -15,7 +15,7 @@ List<string> persons = new List<string>();
 
 while(done == false){
   var input = Console.ReadLine();
-  if(input == null){
+  if(input == null || input == ""){
     Console.WriteLine("Please input a name");
     continue;
   }
