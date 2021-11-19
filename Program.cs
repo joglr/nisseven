@@ -15,9 +15,12 @@ List<string> persons = new List<string>();
 
 while(done == false){
   var input = Console.ReadLine();
-  if(input == "miskidut"){done = true; continue;}
   if(input == null){
     Console.WriteLine("Please input a name");
+    continue;
+  }
+  if(input.ToLower() == "miskidut"){
+    done = true;
     continue;
   }
   persons.Add(input);
