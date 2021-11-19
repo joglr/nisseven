@@ -145,7 +145,7 @@ while (true)
     {
       Console.Clear();
       Console.WriteLine("You should gift these people:");
-      Console.WriteLine(String.Join(', ', yourReceivers));
+      Console.WriteLine(String.Join(", ", yourReceivers));
       Console.WriteLine($"This message will self destruct in {10 - i} seconds");
       Thread.Sleep(1000);
     }
