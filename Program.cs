@@ -18,26 +18,8 @@ using System.Speech.AudioFormat;
 using System.Runtime.InteropServices;
 
 SpeechSynthesizer? ss = null;
-
-if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-{
-  //   var sre = new SpeechRecognitionEngine();
-  //   sre.SetInputToDefaultAudioDevice();
-  //   sre.LoadGrammar(new DictationGrammar{
-  //     Name = ""
-  //   });
-  //   var text = sre.Recognize(TimeSpan.FromSeconds(5), RecognizeMode.Single);
-  //   System.Console.WriteLine(text.Text);
-  //   Console.ReadLine();
-
-
-  ss = new SpeechSynthesizer();
-  var pb = new PromptBuilder();
-  pb.AppendText("Hello there", PromptEmphasis.Strong);
-  ss.Speak(pb);
-}
-
 var rand = new Random();
+var doneString = "done";
 
 Console.Clear();
 
@@ -46,19 +28,27 @@ var WriteSnow = (String write) =>
   Console.WriteLine($"⛄ {write}");
 };
 
-var doneString = "done";
 
 int giftsPerPerson = 0;
+
+Console.Clear();
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+  ss = new SpeechSynthesizer();
+  var pb = new PromptBuilder();
+  pb.AppendText("Merry christmas", PromptEmphasis.Strong);
+  ss.Speak(pb);
+}
+
 while (giftsPerPerson == 0)
 {
-  Console.Clear();
   Console.WriteLine("Welcome christmas-nisse!🎅🏼");
   Console.WriteLine();
   Console.WriteLine("Please enter amount of gifts per person");
   var input = Console.ReadLine();
   int.TryParse(input, out giftsPerPerson);
 }
-
 
 var done = false;
 List<string> givers = new List<string>();
@@ -129,9 +119,7 @@ foreach (var person in givers)
   List<string> toGiveTo = new List<string>();
 
   var mes = new Queue<string>(receivers.Where(p => p == person || toGiveTo.Contains(p)));
-  // foreach(var p in mes) System.Console.WriteLine($"me: {p}");
   var others = new Queue<string>(receivers.Where(p => p != person && !toGiveTo.Contains(p)));
-  // foreach(var p in others) System.Console.WriteLine($"others: {p}");
 
   for (int i = 0; i < giftsPerPerson; i++)
   {
@@ -166,6 +154,7 @@ foreach (var person in givers)
 //   }
 // }
 
+Console.Clear();
 Console.WriteLine("Done. Press enter to continue.");
 Console.ReadLine();
 
