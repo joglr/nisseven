@@ -12,6 +12,30 @@ Opsætningsface:
 */
 using System;
 using System.Collections.Generic;
+using System.Speech.Synthesis;
+using System.Speech.Recognition;
+using System.Speech.AudioFormat;
+using System.Runtime.InteropServices;
+
+SpeechSynthesizer? ss = null;
+
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+{
+  //   var sre = new SpeechRecognitionEngine();
+  //   sre.SetInputToDefaultAudioDevice();
+  //   sre.LoadGrammar(new DictationGrammar{
+  //     Name = ""
+  //   });
+  //   var text = sre.Recognize(TimeSpan.FromSeconds(5), RecognizeMode.Single);
+  //   System.Console.WriteLine(text.Text);
+  //   Console.ReadLine();
+
+
+  ss = new SpeechSynthesizer();
+  var pb = new PromptBuilder();
+  pb.AppendText("Hello there", PromptEmphasis.Strong);
+  ss.Speak(pb);
+}
 
 var rand = new Random();
 
@@ -22,7 +46,7 @@ var WriteSnow = (String write) =>
   Console.WriteLine($"⛄ {write}");
 };
 
-var doneString = "miskidut";
+var doneString = "done";
 
 int giftsPerPerson = 0;
 while (giftsPerPerson == 0)
@@ -51,11 +75,19 @@ while (done == false)
   Console.WriteLine(givers.Count == 0 ? "" : String.Join(", ", givers));
   Console.WriteLine();
   var input = Console.ReadLine();
-  if (input == null || input == "")
+  if (input == null)
   {
     Console.WriteLine($"Please input a name or write {doneString} when done");
     continue;
   }
+  input = input.Trim();
+
+  if (input == "")
+  {
+    Console.WriteLine($"Please input a name or write {doneString} when done");
+    continue;
+  }
+
   if (input.ToLower() == doneString)
   {
     if (givers.Count < giftsPerPerson + 1)
@@ -65,6 +97,10 @@ while (done == false)
     }
     done = true;
     continue;
+  }
+  if (givers.Exists(x => x.ToLower() == input.ToLower()))
+  {
+    feedback = $"{input} is already on santas list";
   }
   givers.Add(input);
 }
@@ -115,7 +151,7 @@ foreach (var person in givers)
     toGiveTo.Add(personToGiveTo);
   }
 
-  map.Add(person, toGiveTo.ToArray());
+  map.Add(person.ToLower(), toGiveTo.ToArray());
   receivers = new Queue<string>(mes.Concat(others).OrderBy(_ => rand.Next()));
 }
 
@@ -130,26 +166,50 @@ foreach (var person in givers)
 //   }
 // }
 
+Console.WriteLine("Done. Press enter to continue.");
 Console.ReadLine();
 
-while (true)
+if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || ss == null)
 {
-  Console.Clear();
-  Console.WriteLine("Type your name to know who you should gift to");
-  var person = Console.ReadLine();
-  if (person != null && person != "" && map.TryGetValue(person, out var yourReceivers))
+
+  while (true)
   {
-    if (yourReceivers == null) throw new Exception("Something went wrong! :(");
-
-    for (int i = 0; i < 10; i++)
+    Console.Clear();
+    Console.WriteLine("Type your name to know who you should gift to");
+    var person = Console.ReadLine();
+    if (person != null && person != "" && map.TryGetValue(person.ToLower(), out var yourReceivers))
     {
-      Console.Clear();
-      Console.WriteLine("You should gift these people:");
-      Console.WriteLine(String.Join(", ", yourReceivers));
-      Console.WriteLine($"This message will self destruct in {10 - i} seconds");
-      Thread.Sleep(1000);
-    }
+      if (yourReceivers == null) throw new Exception("Something went wrong! :(");
 
-    Console.WriteLine();
+      for (int i = 0; i < 10; i++)
+      {
+        Console.Clear();
+        Console.WriteLine("You should gift these people:");
+        Console.WriteLine(String.Join(", ", yourReceivers));
+        Console.WriteLine($"This message will self destruct in {10 - i} seconds");
+        Thread.Sleep(1000);
+      }
+
+      Console.WriteLine();
+    }
+  }
+} else {
+  Console.Clear();
+  ss.Speak("Everyone, close your eyes.");
+  Console.WriteLine("Everyone, close your eyes.");
+  Thread.Sleep(5000);
+  Console.Clear();
+  foreach (var tuple in map)
+  {
+      if (tuple.Value == null) throw new Exception("Something went wrong! :(");
+      Console.Clear();
+      ss.Speak($"{tuple.Key}. Please look at the screen");
+
+      Console.WriteLine($"{tuple.Key}, you should gift these people:");
+      Console.WriteLine(String.Join(", ", tuple.Value));
+      Thread.Sleep(10000);
+      Console.Clear();
+      ss.Speak($"{tuple.Key}. Close your eyes");
+
   }
 }
