@@ -158,9 +158,31 @@ Console.Clear();
 Console.WriteLine("Done. Press enter to continue.");
 Console.ReadLine();
 
-if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || ss == null)
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && ss != null)
 {
+  Console.Clear();
+  Console.WriteLine("Everyone, close your eyes.");
+  ss.Speak("Everyone, close your eyes.");
+  Thread.Sleep(2000);
+  Console.Clear();
+  foreach (var tuple in map)
+  {
+    if (tuple.Value == null) throw new Exception("Something went wrong! :(");
+    Console.Clear();
+    ss.Speak($"{tuple.Key}. Please look at the screen");
 
+    Console.WriteLine($"{tuple.Key}, you should gift these people:");
+    Console.WriteLine(String.Join(", ", tuple.Value));
+    Thread.Sleep(5000);
+    Console.Clear();
+    ss.Speak($"{tuple.Key}. Close your eyes");
+    Thread.Sleep(1000);
+
+  }
+}
+else
+{
+  // Fallback if no voice is available
   while (true)
   {
     Console.Clear();
@@ -181,24 +203,5 @@ if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || ss == null)
 
       Console.WriteLine();
     }
-  }
-} else {
-  Console.Clear();
-  ss.Speak("Everyone, close your eyes.");
-  Console.WriteLine("Everyone, close your eyes.");
-  Thread.Sleep(5000);
-  Console.Clear();
-  foreach (var tuple in map)
-  {
-      if (tuple.Value == null) throw new Exception("Something went wrong! :(");
-      Console.Clear();
-      ss.Speak($"{tuple.Key}. Please look at the screen");
-
-      Console.WriteLine($"{tuple.Key}, you should gift these people:");
-      Console.WriteLine(String.Join(", ", tuple.Value));
-      Thread.Sleep(10000);
-      Console.Clear();
-      ss.Speak($"{tuple.Key}. Close your eyes");
-
   }
 }
