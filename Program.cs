@@ -23,9 +23,16 @@ var doneString = "done";
 
 Console.Clear();
 
-var WriteSnow = (String write) =>
+var WriteSnow = (string text) =>
 {
-  Console.WriteLine($"⛄ {write}");
+  Console.WriteLine($"⛄ {text}");
+};
+
+var WriteAndSpeak = (string text, bool clear) =>
+{
+  if (clear) Console.Clear();
+  Console.WriteLine(text);
+  if (ss != null && RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) ss.Speak(text);
 };
 
 
