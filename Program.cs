@@ -1,20 +1,4 @@
-﻿/*
-CMLTool
-Opsætningsface:
-  Indskrivning af personer
-  Pulje af personer
-  Personerne
-
-  TODO: Check if name already exists
-  Everyone, close your eyes
-  {person}, wake up! Look at the screen
-  Speech synthesis
-*/
-using System;
-using System.Collections.Generic;
-using System.Speech.Synthesis;
-using System.Speech.Recognition;
-using System.Speech.AudioFormat;
+﻿using System.Speech.Synthesis;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
