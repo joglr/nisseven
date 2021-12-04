@@ -1,4 +1,4 @@
-/*
+﻿/*
 CMLTool
 Opsætningsface:
   Indskrivning af personer
@@ -117,6 +117,7 @@ else
     if (givers.Exists(x => x == input))
     {
       feedback = $"{input} is already on santas list";
+      continue;
     }
     givers.Add(input);
   }
