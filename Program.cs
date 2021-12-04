@@ -114,7 +114,7 @@ else
       done = true;
       continue;
     }
-    if (givers.Exists(x => x.ToLower() == input.ToLower()))
+    if (givers.Exists(x => x == input))
     {
       feedback = $"{input} is already on santas list";
     }
@@ -214,7 +214,7 @@ else
     Console.Clear();
     Console.WriteLine("Type your name to know who you should gift to");
     var person = Console.ReadLine();
-    if (person != null && person != "" && giftMap.TryGetValue(person.ToLower(), out var yourReceivers))
+    if (person != null && person != "" && giftMap.TryGetValue(person, out var yourReceivers))
     {
       if (yourReceivers == null) throw new Exception("Something went wrong! :(");
 
