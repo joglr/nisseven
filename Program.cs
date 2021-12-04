@@ -57,7 +57,8 @@ if (arguments.Length > 1 && arguments[1].EndsWith(".secret"))
 {
   // Load map from file
   WriteAndSpeak("Loading from file", false);
-  var json = File.ReadAllText(arguments[1]);
+  var base64 = File.ReadAllText(arguments[1].Trim());
+  var json = Convert.FromBase64String(base64);
   var result = JsonSerializer.Deserialize<Dictionary<string, string[]>>(json);
   if (result == null) throw new Exception("Error reading file");
   else giftMap = result;
@@ -162,12 +163,20 @@ else
       toGiveTo.Add(personToGiveTo);
     }
 
-    giftMap.Add(person.ToLower(), toGiveTo.ToArray());
+    giftMap.Add(person, toGiveTo.ToArray());
     receivers = new Queue<string>(mes.Concat(others).OrderBy(_ => rand.Next()));
   }
 
-  var bytes = JsonSerializer.SerializeToUtf8Bytes(giftMap);
-  File.WriteAllBytes("nisseven.secret", bytes);
+  var str = JsonSerializer.Serialize(giftMap);
+
+  if (str != null) {
+
+  // Convert the variable str to Base64 string
+  var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
+  File.WriteAllText("nisseven.secret", base64);
+  } else {
+    Console.WriteLine("Error serializing data");
+  }
 }
 WriteAndSpeak("Done. Press enter to continue.", true);
 Console.ReadLine();
