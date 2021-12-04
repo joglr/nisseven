@@ -1,4 +1,4 @@
-﻿/*
+/*
 CMLTool
 Opsætningsface:
   Indskrivning af personer
@@ -71,7 +71,7 @@ else
     Console.Clear();
     Console.WriteLine("Welcome christmas-nisse!🎅🏼");
     Console.WriteLine();
-    WriteAndSpeak("Please enter amount of gifts per person", false);
+    Console.WriteLine("Please enter amount of gifts per person");
     var input = Console.ReadLine();
     int.TryParse(input, out giftsPerPerson);
   }
@@ -86,7 +86,7 @@ else
     if (feedback.Length > 0) Console.WriteLine(feedback);
     feedback = "";
     var msg = givers.Count == 0 ? "Add new name" : "Add another name";
-    WriteAndSpeak($"{msg} (or write {doneString} to exit):", false);
+    Console.WriteLine($"{msg} (or write {doneString} to exit):");
     Console.WriteLine();
     Console.WriteLine(givers.Count == 0 ? "" : String.Join(", ", givers));
     Console.WriteLine();
